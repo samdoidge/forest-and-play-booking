@@ -117,6 +117,11 @@
     border-bottom:1px dashed var(--green-line);text-align:center;padding:11px 6px;
   }
   .sessions td.day{text-align:left;font-weight:700;color:var(--green-deep);padding-left:14px;font-size:15px}
+  .sessions tr.weekrow td{
+    background:var(--green-soft);color:var(--green-deep);font-weight:700;font-size:13.5px;
+    text-align:left;padding:8px 14px;letter-spacing:.04em;text-transform:uppercase;
+    border-bottom:none;
+  }
   .sessions input{width:21px;height:21px;accent-color:var(--green-deep);cursor:pointer}
   .halfday-hint{display:none;margin-top:10px}
   .halfday-hint.show{display:block}
@@ -191,8 +196,8 @@
     <h1>Holiday <em>Club</em> Booking</h1>
     <p class="tagline">Adventure · Nature · Friendship · Discovery — for rising 3s to 8 year olds</p>
     <div class="meta-strip">
+      <span>Summer 2026: 20–22 &amp; 27–31 July</span>
       <span>Winslow, Buckinghamshire MK18 3JL</span>
-      <span>Mon–Fri</span>
       <span>Full day £65 · Half day £35</span>
     </div>
   </header>
@@ -549,16 +554,34 @@
 
 <script>
 (function(){
-  var DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  // ================= EDIT HOLIDAY DATES HERE =================
+  // One entry per holiday club week. Only list days that are running.
+  // When a new holiday is announced, update this list (and the dates
+  // in the header chips near the top of the page), then publish.
+  var WEEKS=[
+    {label:'Week 1 · 20 – 22 July 2026',
+     days:['Monday 20 July','Tuesday 21 July','Wednesday 22 July']},
+    {label:'Week 2 · 27 – 31 July 2026',
+     days:['Monday 27 July','Tuesday 28 July','Wednesday 29 July','Thursday 30 July','Friday 31 July']}
+  ];
+  // ===========================================================
+  var DAYS=[];
   var tbody=document.querySelector('#sessionTable tbody');
-  DAYS.forEach(function(day){
-    var tr=document.createElement('tr');
-    tr.innerHTML='<td class="day">'+day+'</td>'+
-      ['Full day','Morning','Afternoon'].map(function(kind){
-        return '<td><input type="checkbox" name="'+day+' - '+kind+'" value="Yes" '+
-          'data-day="'+day+'" data-kind="'+kind+'" aria-label="'+day+' '+kind+'"></td>';
-      }).join('');
-    tbody.appendChild(tr);
+  WEEKS.forEach(function(week){
+    var wr=document.createElement('tr');
+    wr.className='weekrow';
+    wr.innerHTML='<td colspan="4">'+week.label+'</td>';
+    tbody.appendChild(wr);
+    week.days.forEach(function(day){
+      DAYS.push(day);
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td class="day">'+day+'</td>'+
+        ['Full day','Morning','Afternoon'].map(function(kind){
+          return '<td><input type="checkbox" name="'+day+' - '+kind+'" value="Yes" '+
+            'data-day="'+day+'" data-kind="'+kind+'" aria-label="'+day+' '+kind+'"></td>';
+        }).join('');
+      tbody.appendChild(tr);
+    });
   });
 
   var boxes=[].slice.call(tbody.querySelectorAll('input[type=checkbox]'));
