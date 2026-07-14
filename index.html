@@ -670,6 +670,9 @@
 
     btn.disabled=true;btn.textContent='Sending…';
     var data=new FormData(form);
+    var emptyKeys=[];
+    data.forEach(function(v,k){if(typeof v==='string'&&v.trim()==='')emptyKeys.push(k);});
+    emptyKeys.forEach(function(k){data.delete(k);});
     fetch('https://api.web3forms.com/submit',{method:'POST',body:data})
       .then(function(r){return r.json();})
       .then(function(res){
