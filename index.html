@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holiday Club Booking — Forest &amp; Play</title>
+<meta name="description" content="Book Forest & Play Holiday Club sessions — for rising 3s to 8 year olds in Winslow, Buckinghamshire.">
+<style>
+  :root{
+    --cream:#FDFAF5;
+    --card:#FDFAF5;
+    --ink:#2E3A24;
+    --green-deep:#2F4A22;
+    --green:#4E6B33;
+    --green-soft:#E8EDDC;
+    --green-line:#C9D4B4;
+    --orange:#C75B28;
+    --orange-soft:#F7E5D8;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:24px 20px 80px;position:relative;z-index:1}
+
+  /* ---------- booklet art ---------- */
+  .corner-art{position:absolute;top:0;z-index:0;pointer-events:none}
+  .corner-art.tl{left:0;width:min(220px,26vw)}
+  .corner-art.tr{right:0;width:min(240px,28vw)}
+  .sec-head img.critter{
+    height:88px;margin-left:auto;align-self:center;flex:none;
+    transform:translateY(10px);pointer-events:none;
+  }
+  @media(max-width:640px){.sec-head img.critter{height:64px}}
+  .forest-footer{display:flex;justify-content:space-between;align-items:flex-end;margin-top:44px}
+  .forest-footer img{width:min(170px,32vw);pointer-events:none}
+
+  /* ---------- header ---------- */
+  header{text-align:center;padding:36px 0 8px}
+  .badge{
+    display:inline-block;background:var(--green-deep);color:#fff;
+    border-radius:999px;padding:6px 18px;font-size:13px;letter-spacing:.12em;
+    text-transform:uppercase;font-weight:700;
+  }
+  h1{
+    font-family:"Iowan Old Style",Palatino,Georgia,serif;
+    font-size:clamp(34px,6vw,52px);line-height:1.1;
+    margin:18px 0 10px;color:var(--green-deep);
+  }
+  h1 em{font-style:normal;color:var(--orange)}
+  .tagline{color:var(--green);font-size:17px;margin:0}
+  .meta-strip{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:22px 0 8px;
+  }
+  .meta-strip span{
+    background:var(--green-soft);border:1px solid var(--green-line);
+    border-radius:999px;padding:6px 14px;font-size:14px;color:var(--green-deep);font-weight:600;
+  }
+
+  /* ---------- sections ---------- */
+  section{
+    background:var(--card);border:1px solid var(--green-line);
+    border-radius:var(--radius);padding:26px 26px 30px;margin-top:26px;
+    box-shadow:0 2px 10px rgba(47,74,34,.06);
+  }
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+  .sec-num{
+    flex:none;width:30px;height:30px;border-radius:999px;background:var(--green-deep);
+    color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;
+    transform:translateY(4px);
+  }
+  h2{
+    font-family:"Iowan Old Style",Palatino,Georgia,serif;
+    font-size:26px;margin:0;color:var(--green-deep);
+  }
+  .sec-sub{color:var(--orange);margin:2px 0 18px;font-size:15.5px}
+  h3{font-size:16px;margin:26px 0 10px;color:var(--green-deep);text-transform:uppercase;letter-spacing:.06em}
+  .note{
+    background:var(--green-soft);border-radius:10px;padding:12px 16px;
+    font-size:14.5px;color:var(--green-deep);margin:14px 0 6px;
+  }
+
+  /* ---------- fields ---------- */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  label.f{display:block;margin-top:14px;font-weight:600;font-size:14.5px;color:var(--green-deep)}
+  label.f .opt{font-weight:400;color:#6b7561}
+  input[type=text],input[type=tel],input[type=email],input[type=date],input[type=time],textarea,select{
+    width:100%;margin-top:6px;padding:10px 12px;font:inherit;color:var(--ink);
+    background:#fff;border:1.5px solid var(--green-line);border-radius:9px;
+  }
+  textarea{min-height:84px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green)}
+  .choices{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .choices label{
+    display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--green-line);
+    border-radius:9px;padding:9px 14px;cursor:pointer;font-size:15px;
+  }
+  .choices label:has(input:checked){border-color:var(--green-deep);background:var(--green-soft);font-weight:600}
+  .choices input{accent-color:var(--green-deep);width:17px;height:17px;margin:0}
+  .reveal{display:none;margin-top:6px}
+  .reveal.open{display:block}
+
+  /* ---------- sessions table ---------- */
+  .sessions{width:100%;border-collapse:collapse;margin-top:14px}
+  .sessions th{
+    background:var(--green-deep);color:#fff;font-size:13px;padding:10px 6px;line-height:1.35;
+  }
+  .sessions th small{display:block;font-weight:400;opacity:.85}
+  .sessions th:first-child{border-radius:9px 0 0 0;text-align:left;padding-left:14px}
+  .sessions th:last-child{border-radius:0 9px 0 0}
+  .sessions td{
+    border-bottom:1px dashed var(--green-line);text-align:center;padding:11px 6px;
+  }
+  .sessions td.day{text-align:left;font-weight:700;color:var(--green-deep);padding-left:14px;font-size:15px}
+  .sessions input{width:21px;height:21px;accent-color:var(--green-deep);cursor:pointer}
+  .halfday-hint{display:none;margin-top:10px}
+  .halfday-hint.show{display:block}
+
+  /* ---------- summary ---------- */
+  .summary{
+    display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;align-items:stretch;
+  }
+  .summary .line{flex:1 1 180px;background:var(--green-soft);border-radius:10px;padding:12px 16px;font-size:15px}
+  .summary .line b{display:block;font-size:22px;color:var(--green-deep)}
+  .summary .total{background:var(--green-deep);color:#fff}
+  .summary .total b{font-size:28px;color:#fff}
+
+  /* ---------- collector / contact rows ---------- */
+  .rowset .row{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px;
+  }
+  .rowset.contacts .row{grid-template-columns:1.2fr 1fr 1fr 1fr}
+  @media(max-width:640px){
+    .rowset .row,.rowset.contacts .row{grid-template-columns:1fr;border-bottom:1px dashed var(--green-line);padding-bottom:14px}
+  }
+  .rowset .row input{margin-top:0}
+  .row-label{font-size:13px;font-weight:700;color:var(--green);margin-top:16px}
+
+  /* ---------- permissions ---------- */
+  .perm{border:1.5px solid var(--green-line);border-radius:10px;padding:16px 18px;margin-top:14px}
+  .perm h4{margin:0 0 6px;font-size:15.5px;color:var(--green-deep)}
+  .perm p{margin:0 0 10px;font-size:14.5px;color:#55603f}
+  .stack{display:flex;flex-direction:column;gap:8px}
+  .stack label{
+    display:flex;gap:10px;align-items:flex-start;background:#fff;border:1.5px solid var(--green-line);
+    border-radius:9px;padding:10px 13px;cursor:pointer;font-size:14.5px;line-height:1.45;
+  }
+  .stack label:has(input:checked){border-color:var(--green-deep);background:var(--green-soft)}
+  .stack input{accent-color:var(--green-deep);width:17px;height:17px;flex:none;margin-top:2px}
+
+  /* ---------- declaration & submit ---------- */
+  .declare{
+    display:flex;gap:12px;align-items:flex-start;background:var(--orange-soft);
+    border:1.5px solid var(--orange);border-radius:10px;padding:14px 16px;margin-top:18px;
+    font-size:15px;
+  }
+  .declare input{width:19px;height:19px;accent-color:var(--orange);flex:none;margin-top:2px}
+  button[type=submit]{
+    display:block;width:100%;margin-top:26px;padding:16px;font:inherit;font-size:18px;font-weight:700;
+    color:#fff;background:var(--green-deep);border:0;border-radius:12px;cursor:pointer;
+  }
+  button[type=submit]:hover{background:#243a1a}
+  button[type=submit]:disabled{opacity:.6;cursor:wait}
+  .error-msg{color:#A33111;font-weight:600;margin-top:12px;display:none}
+  .error-msg.show{display:block}
+
+  /* ---------- success ---------- */
+  #success{display:none;text-align:center;padding:60px 20px}
+  #success.show{display:block}
+  #success h2{font-size:32px}
+  #success .tick{
+    width:74px;height:74px;border-radius:999px;background:var(--green-deep);color:#fff;
+    font-size:38px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  }
+  footer{text-align:center;margin-top:40px;font-size:13.5px;color:#77805f}
+  .req{color:var(--orange)}
+</style>
+</head>
+<body>
+<img class="corner-art tl" src="art/art-foliage-tl.png" alt="" aria-hidden="true">
+<img class="corner-art tr" src="art/art-foliage-tr.png" alt="" aria-hidden="true">
+<div class="wrap">
+
+  <header>
+    <span class="badge">Forest &amp; Play · Nurture &amp; Grow</span>
+    <h1>Holiday <em>Club</em> Booking</h1>
+    <p class="tagline">Adventure · Nature · Friendship · Discovery — for rising 3s to 8 year olds</p>
+    <div class="meta-strip">
+      <span>Winslow, Buckinghamshire MK18 3JL</span>
+      <span>Mon–Fri</span>
+      <span>Full day £65 · Half day £35</span>
+    </div>
+  </header>
+
+  <form id="bookingForm" novalidate>
+    <!-- Web3Forms -->
+    <input type="hidden" name="access_key" value="0f3d99e2-f783-4e4a-a71c-e83c387f8c15">
+    <input type="hidden" name="subject" id="mailSubject" value="New Holiday Club booking">
+    <input type="hidden" name="from_name" value="Forest & Play booking form">
+    <input type="hidden" name="Booking summary" id="bookingSummaryField" value="">
+    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+    <!-- 1 · SESSIONS -->
+    <section>
+      <div class="sec-head"><div class="sec-num">1</div><h2>Choose your sessions</h2><img class="critter" src="art/art-badger.png" alt="" aria-hidden="true"></div>
+      <p class="sec-sub">Choose the days that work best for your family.</p>
+      <table class="sessions" id="sessionTable">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Full day<small>8:30am–4:00pm · £65</small></th>
+            <th>Morning<small>8:30am–12:00pm · £35</small></th>
+            <th>Afternoon<small>12:30pm–4:00pm · £35</small></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="note halfday-hint" id="halfdayHint">
+        Tip: a morning <em>and</em> afternoon on the same day costs £70 — a full day is £65.
+      </div>
+      <div class="summary">
+        <div class="line">Full days × £65 <b id="sumFull">0 = £0</b></div>
+        <div class="line">Half days × £35 <b id="sumHalf">0 = £0</b></div>
+        <div class="line total">Total due <b id="sumTotal">£0</b></div>
+      </div>
+      <div class="note">
+        <strong>Payment by bank transfer.</strong> We'll confirm your booking and send bank details by email —
+        please use your child's name as the payment reference.
+      </div>
+    </section>
+
+    <!-- 2 · CHILD DETAILS -->
+    <section>
+      <div class="sec-head"><div class="sec-num">2</div><h2>Child details</h2><img class="critter" src="art/art-deer.png" alt="" aria-hidden="true"></div>
+      <p class="sec-sub">Let's get to know your child.</p>
+      <div class="grid2">
+        <div><label class="f">Child's full name <span class="req">*</span>
+          <input type="text" name="Child - full name" id="childName" required autocomplete="off"></label></div>
+        <div><label class="f">Date of birth <span class="req">*</span>
+          <input type="date" name="Child - date of birth" id="childDob" required></label></div>
+        <div><label class="f">Preferred name <span class="opt">(if different)</span>
+          <input type="text" name="Child - preferred name"></label></div>
+        <div>
+          <label class="f">Gender</label>
+          <div class="choices">
+            <label><input type="radio" name="Child - gender" value="Boy">Boy</label>
+            <label><input type="radio" name="Child - gender" value="Girl">Girl</label>
+          </div>
+        </div>
+      </div>
+      <label class="f">Home address <span class="req">*</span>
+        <textarea name="Child - home address" id="childAddress" required></textarea></label>
+
+      <label class="f">Any siblings attending Forest &amp; Play Holiday Club?</label>
+      <div class="choices" data-reveal="siblingsDetail" data-on="Yes">
+        <label><input type="radio" name="Siblings attending" value="Yes">Yes</label>
+        <label><input type="radio" name="Siblings attending" value="No" checked>No</label>
+      </div>
+      <div class="reveal" id="siblingsDetail">
+        <label class="f">Names and ages
+          <input type="text" name="Siblings - names and ages"></label>
+      </div>
+    </section>
+
+    <!-- 3 · PARENT / CARER -->
+    <section>
+      <div class="sec-head"><div class="sec-num">3</div><h2>Parent / carer details</h2><img class="critter" src="art/art-squirrel.png" alt="" aria-hidden="true"></div>
+      <p class="sec-sub">The people who know and love your child best.</p>
+
+      <h3>Parent / carer 1 — main contact</h3>
+      <div class="grid2">
+        <div><label class="f">Full name <span class="req">*</span>
+          <input type="text" name="Parent 1 - full name" id="p1Name" required></label></div>
+        <div><label class="f">Relationship to child <span class="req">*</span>
+          <input type="text" name="Parent 1 - relationship" id="p1Rel" required></label></div>
+        <div><label class="f">Mobile number <span class="req">*</span>
+          <input type="tel" name="Parent 1 - mobile" id="p1Mobile" required></label></div>
+        <div><label class="f">Email address <span class="req">*</span>
+          <input type="email" name="email" id="p1Email" required></label></div>
+        <div><label class="f">Place of work <span class="opt">(optional)</span>
+          <input type="text" name="Parent 1 - place of work"></label></div>
+        <div><label class="f">Work telephone <span class="opt">(optional)</span>
+          <input type="tel" name="Parent 1 - work telephone"></label></div>
+      </div>
+      <label class="f">Home address <span class="opt">(if different from child's)</span>
+        <textarea name="Parent 1 - home address"></textarea></label>
+
+      <h3>Parent / carer 2 — second contact <span style="text-transform:none;letter-spacing:0;color:#6b7561;font-weight:400">(optional)</span></h3>
+      <div class="grid2">
+        <div><label class="f">Full name
+          <input type="text" name="Parent 2 - full name"></label></div>
+        <div><label class="f">Relationship to child
+          <input type="text" name="Parent 2 - relationship"></label></div>
+        <div><label class="f">Mobile number
+          <input type="tel" name="Parent 2 - mobile"></label></div>
+        <div><label class="f">Email address
+          <input type="email" name="Parent 2 - email"></label></div>
+      </div>
+
+      <h3>Authorised collectors</h3>
+      <p style="font-size:14.5px;margin:4px 0 0;color:#55603f">Adults authorised to collect your child from Forest &amp; Play. ID may be requested.</p>
+      <div class="rowset" id="collectors">
+        <div class="row-label">Collector 1</div>
+        <div class="row">
+          <input type="text" name="Collector 1 - name" placeholder="Full name">
+          <input type="text" name="Collector 1 - relationship" placeholder="Relationship to child">
+          <input type="tel" name="Collector 1 - mobile" placeholder="Mobile number">
+        </div>
+        <div class="row-label">Collector 2</div>
+        <div class="row">
+          <input type="text" name="Collector 2 - name" placeholder="Full name">
+          <input type="text" name="Collector 2 - relationship" placeholder="Relationship to child">
+          <input type="tel" name="Collector 2 - mobile" placeholder="Mobile number">
+        </div>
+      </div>
+
+      <label class="f">Collection password <span class="req">*</span>
+        <span class="opt">— required when someone different is collecting; you can change it at any time</span>
+        <input type="text" name="Collection code word" id="collectionPw" required autocomplete="off"></label>
+    </section>
+
+    <!-- 4 · MEDICAL -->
+    <section>
+      <div class="sec-head"><div class="sec-num">4</div><h2>Medical information</h2><img class="critter" src="art/art-fox.png" alt="" aria-hidden="true"></div>
+      <p class="sec-sub">Keeping your child safe and well.</p>
+      <div class="note">All information is treated in confidence and only shared with staff who need to know.</div>
+
+      <label class="f">Does your child have any medical conditions?</label>
+      <div class="choices" data-reveal="medCondDetail" data-on="Yes">
+        <label><input type="radio" name="Medical conditions" value="Yes">Yes</label>
+        <label><input type="radio" name="Medical conditions" value="No" checked>No</label>
+      </div>
+      <div class="reveal" id="medCondDetail">
+        <label class="f">Please give details
+          <textarea name="Medical conditions - details"></textarea></label>
+      </div>
+
+      <label class="f">Does your child have any allergies?</label>
+      <div class="choices" data-reveal="allergyDetail" data-on="Yes">
+        <label><input type="radio" name="Allergies" value="Yes">Yes</label>
+        <label><input type="radio" name="Allergies" value="No" checked>No</label>
+      </div>
+      <div class="reveal" id="allergyDetail">
+        <label class="f">For each allergy: the allergy, the reaction, and the treatment required
+          <textarea name="Allergies - details" placeholder="e.g. Peanuts — hives and swelling — antihistamine, EpiPen in bag"></textarea></label>
+      </div>
+
+      <label class="f">Does your child require any regular medication?</label>
+      <div class="choices" data-reveal="medicationDetail" data-on="Yes">
+        <label><input type="radio" name="Regular medication" value="Yes">Yes</label>
+        <label><input type="radio" name="Regular medication" value="No" checked>No</label>
+      </div>
+      <div class="reveal" id="medicationDetail">
+        <div class="grid2">
+          <div><label class="f">Name of medication
+            <input type="text" name="Medication - name"></label></div>
+          <div><label class="f">Dosage
+            <input type="text" name="Medication - dosage"></label></div>
+          <div><label class="f">Time to be given
+            <input type="text" name="Medication - time"></label></div>
+          <div><label class="f">Reason for medication
+            <input type="text" name="Medication - reason"></label></div>
+        </div>
+        <label class="f">Any side effects we should be aware of?
+          <textarea name="Medication - side effects"></textarea></label>
+      </div>
+
+      <label class="f">Any other medical information we should know?
+        <textarea name="Medical - additional information"></textarea></label>
+    </section>
+
+    <!-- 5 · EMERGENCY & CONTACT -->
+    <section>
+      <div class="sec-head"><div class="sec-num">5</div><h2>Emergency contacts</h2><img class="critter" src="art/art-fox2.png" alt="" aria-hidden="true"></div>
+      <p class="sec-sub">Who to contact in an emergency if you are unavailable.</p>
+
+      <div class="rowset contacts">
+        <div class="row-label">Contact 1 (first priority) <span class="req">*</span></div>
+        <div class="row">
+          <input type="text" name="Emergency 1 - name" id="em1Name" placeholder="Full name" required>
+          <input type="text" name="Emergency 1 - relationship" placeholder="Relationship to child">
+          <input type="tel" name="Emergency 1 - mobile" id="em1Mobile" placeholder="Mobile number" required>
+          <input type="tel" name="Emergency 1 - alternative" placeholder="Alternative number">
+        </div>
+        <div class="row-label">Contact 2</div>
+        <div class="row">
+          <input type="text" name="Emergency 2 - name" placeholder="Full name">
+          <input type="text" name="Emergency 2 - relationship" placeholder="Relationship to child">
+          <input type="tel" name="Emergency 2 - mobile" placeholder="Mobile number">
+          <input type="tel" name="Emergency 2 - alternative" placeholder="Alternative number">
+        </div>
+      </div>
+
+      <h3>Doctor / surgery details</h3>
+      <div class="grid2">
+        <div><label class="f">Name of doctor
+          <input type="text" name="Doctor - name"></label></div>
+        <div><label class="f">Surgery name
+          <input type="text" name="Doctor - surgery name"></label></div>
+        <div><label class="f">Surgery telephone
+          <input type="tel" name="Doctor - telephone"></label></div>
+        <div><label class="f">Surgery address
+          <input type="text" name="Doctor - surgery address"></label></div>
+      </div>
+
+      <h3>Language and communication</h3>
+      <label class="f">Is English your child's first language?</label>
+      <div class="choices" data-reveal="langDetail" data-on="No">
+        <label><input type="radio" name="English first language" value="Yes" checked>Yes</label>
+        <label><input type="radio" name="English first language" value="No">No</label>
+      </div>
+      <div class="reveal" id="langDetail">
+        <label class="f">What is your child's first language?
+          <input type="text" name="First language"></label>
+      </div>
+      <label class="f">Does your child require any additional communication support?</label>
+      <div class="choices" data-reveal="commDetail" data-on="Yes">
+        <label><input type="radio" name="Communication support" value="Yes">Yes</label>
+        <label><input type="radio" name="Communication support" value="No" checked>No</label>
+      </div>
+      <div class="reveal" id="commDetail">
+        <label class="f">Please give details
+          <textarea name="Communication support - details"></textarea></label>
+      </div>
+    </section>
+
+    <!-- 6 · ABOUT YOUR CHILD -->
+    <section>
+      <div class="sec-head"><div class="sec-num">6</div><h2>About your child</h2><img class="critter" src="art/art-hedgehog.png" alt="" aria-hidden="true"></div>
+      <p class="sec-sub">Things that help us support your child in the best way possible.</p>
+      <div class="grid2">
+        <div><label class="f">What makes your child happy?
+          <span class="opt">What do they enjoy doing? Favourite things?</span>
+          <textarea name="About - what makes them happy"></textarea></label></div>
+        <div><label class="f">How does your child communicate best?
+          <textarea name="About - communication"></textarea></label></div>
+        <div><label class="f">Is there anything that may worry your child?
+          <span class="opt">Fears, anxieties, situations needing extra support</span>
+          <textarea name="About - worries"></textarea></label></div>
+        <div><label class="f">Eating and drinking
+          <span class="opt">Foods they don't eat, dietary requirements or preferences</span>
+          <textarea name="About - eating and drinking"></textarea></label></div>
+        <div><label class="f">Sleep and rest
+          <span class="opt">Do they usually have a sleep or rest?</span>
+          <textarea name="About - sleep and rest"></textarea></label></div>
+        <div><label class="f">Development and support
+          <span class="opt">Learning or additional support needs</span>
+          <textarea name="About - development and support"></textarea></label></div>
+      </div>
+      <label class="f">Anything else we should know about your child?
+        <span class="opt">Routines, likes, dislikes, personality</span>
+        <textarea name="About - anything else"></textarea></label>
+    </section>
+
+    <!-- 7 · PERMISSIONS -->
+    <section>
+      <div class="sec-head"><div class="sec-num">7</div><h2>Permissions and agreements</h2></div>
+      <p class="sec-sub">How we care for and support your child. You can change these at any time.</p>
+
+      <div class="perm">
+        <h4>Photographs and videos</h4>
+        <p>We may take photographs and videos for learning journeys, displays and promotional purposes.</p>
+        <div class="stack">
+          <label><input type="radio" name="Permission - photos" value="Learning journeys and displays only" required>
+            I give permission for photographs and film for learning journeys and displays within Forest &amp; Play only.</label>
+          <label><input type="radio" name="Permission - photos" value="Displays and promotional use">
+            I also give permission for promotional use (e.g. website, social media, leaflets).</label>
+          <label><input type="radio" name="Permission - photos" value="No photographs">
+            I do NOT give permission for any photographs or videos to be taken or used.</label>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="perm">
+          <h4>Local walks and outings</h4>
+          <p>Regular local walks using public footpaths and quiet country lanes. You'll be told in advance of any visits further afield.</p>
+          <div class="stack">
+            <label><input type="radio" name="Permission - walks" value="Yes" required>I give permission for local walks and outings.</label>
+            <label><input type="radio" name="Permission - walks" value="No">I do NOT give permission.</label>
+          </div>
+        </div>
+        <div class="perm">
+          <h4>Tool use</h4>
+          <p>Children use a range of age-appropriate tools under close supervision.</p>
+          <div class="stack">
+            <label><input type="radio" name="Permission - tools" value="Yes" required>I give permission for tool use activities.</label>
+            <label><input type="radio" name="Permission - tools" value="No">I do NOT give permission.</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="perm">
+        <h4>First aid and emergency medical treatment</h4>
+        <div class="stack">
+          <label><input type="checkbox" name="Permission - first aid and emergency treatment" value="Consent given" id="firstAidConsent" required>
+            In the event of an accident or emergency, I give permission for Forest &amp; Play staff to administer basic
+            first aid, and for my child to receive emergency medical treatment if necessary. <span class="req">*</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 · DECLARATION -->
+    <section>
+      <div class="sec-head"><div class="sec-num">8</div><h2>Declaration</h2></div>
+      <p class="sec-sub">Please confirm and send your booking.</p>
+
+      <label class="f">Your full name (this acts as your signature) <span class="req">*</span>
+        <input type="text" name="Signed by" id="signName" required autocomplete="name"></label>
+
+      <label class="declare">
+        <input type="checkbox" id="declareBox" name="Declaration" value="Confirmed" required>
+        <span>I confirm the information given is accurate to the best of my knowledge, and I will let
+        Forest &amp; Play know immediately of any changes to my child's medical information or our contact details.
+        <span class="req">*</span></span>
+      </label>
+
+      <p style="font-size:13.5px;color:#77805f;margin:14px 0 0">
+        The information you provide is kept confidential and used only to support your child while attending
+        Holiday Club. Submitted <span id="todayLabel"></span>.
+      </p>
+
+      <button type="submit" id="submitBtn">Send booking</button>
+      <p class="error-msg" id="errorMsg"></p>
+    </section>
+  </form>
+
+  <div id="success">
+    <div class="tick">✓</div>
+    <h2>Thank you — booking received!</h2>
+    <p>We'll be in touch by email to confirm your sessions and send payment details.<br>
+    Please use your child's name as the bank transfer reference.</p>
+    <p style="color:var(--green)">We can't wait to welcome your little explorer. 🌿</p>
+  </div>
+
+  <div class="forest-footer" aria-hidden="true">
+    <img src="art/art-trees-l.png" alt="">
+    <img src="art/art-trees-r.png" alt="">
+  </div>
+  <footer>
+    Forest &amp; Play · Winslow, Buckinghamshire MK18 3JL · what3words: ///shortcuts.befitting.awoken<br>
+    Growing confident, curious and resilient children through play in nature.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  var tbody=document.querySelector('#sessionTable tbody');
+  DAYS.forEach(function(day){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td class="day">'+day+'</td>'+
+      ['Full day','Morning','Afternoon'].map(function(kind){
+        return '<td><input type="checkbox" name="'+day+' - '+kind+'" value="Yes" '+
+          'data-day="'+day+'" data-kind="'+kind+'" aria-label="'+day+' '+kind+'"></td>';
+      }).join('');
+    tbody.appendChild(tr);
+  });
+
+  var boxes=[].slice.call(tbody.querySelectorAll('input[type=checkbox]'));
+  function dayBoxes(day){return boxes.filter(function(b){return b.dataset.day===day});}
+
+  function recalc(){
+    var full=0,half=0,chosen=[],bothHint=false;
+    DAYS.forEach(function(day){
+      var db=dayBoxes(day);
+      var f=db[0].checked,m=db[1].checked,a=db[2].checked;
+      if(f){full++;chosen.push(day+': full day');}
+      if(m){half++;chosen.push(day+': morning');}
+      if(a){half++;chosen.push(day+': afternoon');}
+      if(m&&a)bothHint=true;
+    });
+    var total=full*65+half*35;
+    document.getElementById('sumFull').textContent=full+' = £'+(full*65);
+    document.getElementById('sumHalf').textContent=half+' = £'+(half*35);
+    document.getElementById('sumTotal').textContent='£'+total;
+    document.getElementById('halfdayHint').classList.toggle('show',bothHint);
+    return {total:total,chosen:chosen};
+  }
+
+  boxes.forEach(function(b){
+    b.addEventListener('change',function(){
+      var db=dayBoxes(b.dataset.day);
+      if(b.dataset.kind==='Full day'&&b.checked){db[1].checked=false;db[2].checked=false;}
+      if(b.dataset.kind!=='Full day'&&b.checked){db[0].checked=false;}
+      recalc();
+    });
+  });
+  recalc();
+
+  // yes/no reveals
+  [].slice.call(document.querySelectorAll('.choices[data-reveal]')).forEach(function(group){
+    var target=document.getElementById(group.dataset.reveal);
+    var onValue=group.dataset.on;
+    group.addEventListener('change',function(){
+      var checked=group.querySelector('input:checked');
+      target.classList.toggle('open',!!checked&&checked.value===onValue);
+    });
+  });
+
+  // today
+  var today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('todayLabel').textContent=today;
+
+  // ---- autosave to localStorage so a failed submit never loses answers ----
+  var SAVE_KEY='fp-booking-draft';
+  var formEl=document.getElementById('bookingForm');
+  function saveDraft(){
+    var d={};
+    [].forEach.call(formEl.elements,function(el){
+      if(!el.name||el.name==='access_key'||el.name==='botcheck'||el.type==='hidden'||el.type==='submit')return;
+      if(el.type==='checkbox'||el.type==='radio'){
+        if(el.checked)d[el.name+'||'+el.value]=true;
+      }else if(el.value){
+        d[el.name]=el.value;
+      }
+    });
+    try{localStorage.setItem(SAVE_KEY,JSON.stringify(d));}catch(e){}
+  }
+  function restoreDraft(){
+    var raw;
+    try{raw=localStorage.getItem(SAVE_KEY);}catch(e){return;}
+    if(!raw)return;
+    var d=JSON.parse(raw);
+    Object.keys(d).forEach(function(k){
+      var parts=k.split('||');
+      if(parts.length===2){
+        var sel='[name="'+parts[0].replace(/"/g,'\\"')+'"][value="'+parts[1].replace(/"/g,'\\"')+'"]';
+        var el=formEl.querySelector(sel);
+        if(el){el.checked=true;el.dispatchEvent(new Event('change',{bubbles:true}));}
+      }else{
+        var el2=formEl.querySelector('[name="'+parts[0].replace(/"/g,'\\"')+'"]');
+        if(el2)el2.value=d[k];
+      }
+    });
+    recalc();
+  }
+  formEl.addEventListener('input',saveDraft);
+  formEl.addEventListener('change',saveDraft);
+  restoreDraft();
+
+  // submit
+  var form=document.getElementById('bookingForm');
+  var btn=document.getElementById('submitBtn');
+  var err=document.getElementById('errorMsg');
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    err.classList.remove('show');
+
+    var s=recalc();
+    if(s.chosen.length===0){
+      err.textContent='Please tick at least one session in section 1.';
+      err.classList.add('show');
+      document.getElementById('sessionTable').scrollIntoView({behavior:'smooth'});
+      return;
+    }
+    if(!form.checkValidity()){
+      form.reportValidity();
+      return;
+    }
+
+    var childName=document.getElementById('childName').value.trim();
+    document.getElementById('mailSubject').value='Holiday Club booking — '+childName+' ('+s.chosen.length+' session'+(s.chosen.length>1?'s':'')+', £'+s.total+')';
+    document.getElementById('bookingSummaryField').value=s.chosen.join('; ')+'. Total due: £'+s.total+'. Submitted '+today+'.';
+
+    btn.disabled=true;btn.textContent='Sending…';
+    var data=new FormData(form);
+    fetch('https://api.web3forms.com/submit',{method:'POST',body:data})
+      .then(function(r){return r.json();})
+      .then(function(res){
+        if(res.success){
+          try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+          form.style.display='none';
+          document.querySelector('header .meta-strip').style.display='none';
+          document.getElementById('success').classList.add('show');
+          window.scrollTo({top:0,behavior:'smooth'});
+        }else{throw new Error(res.message||'Submission failed');}
+      })
+      .catch(function(ex){
+        err.textContent='Sorry — something went wrong sending your booking ('+ex.message+'). Please try again, or email us at hello@forestandplay.org.';
+        err.classList.add('show');
+        btn.disabled=false;btn.textContent='Send booking';
+      });
+  });
+})();
+</script>
+</body>
+</html>
