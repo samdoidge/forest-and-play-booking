@@ -693,6 +693,13 @@
 
     btn.disabled=true;btn.textContent='Sending…';
     var data=new FormData(form);
+    // date input submits ISO yyyy-mm-dd, which reads US-style in the email — send UK-readable instead
+    var dob=data.get('Child - date of birth');
+    if(dob&&/^\d{4}-\d{2}-\d{2}$/.test(dob)){
+      var dp=dob.split('-');
+      var monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+      data.set('Child - date of birth',parseInt(dp[2],10)+' '+monthNames[parseInt(dp[1],10)-1]+' '+dp[0]);
+    }
     var emptyKeys=[];
     data.forEach(function(v,k){if(typeof v==='string'&&v.trim()==='')emptyKeys.push(k);});
     emptyKeys.forEach(function(k){data.delete(k);});
